@@ -1,0 +1,52 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * @var $block ExtraInfo
+ */
+
+use Dovhan\Tab\Block\ExtraInfo;
+
+$products = $block->getChildProducts();
+?>
+
+<table class="table">
+    <colgroup>
+        <col width="25%">
+        <col width="30%">
+        <col width="30%">
+        <col width="15%">
+    </colgroup>
+    <tbody>
+    <?php foreach ($products as $product): ?>
+        <tr class="<?= $product->getSku() ?>">
+            <td><?= $product->getSku() ?></td>
+            <td><?= $product->getName() ?></td>
+            <td>
+                <?php foreach ($block->getSwatchAttribute($product)[$product->getId()] as $value): ?>
+                    <?= ucfirst($value['attribute_code']) ?>:
+                    <?php if ($value['attribute_code'] === 'color') { ?>
+                        <span style="display: inline-block; width:30px;height: 15px; background:<?= $value['attribute_value_text'] ?>">&nbsp</span>
+                        <br>
+                    <?php } else { ?>
+                        <?= $value['attribute_value_text']; ?> <br>
+                    <?php } ?>
+                <?php endforeach; ?>
+            </td>
+            <td>
+
+                <button class="button action primary"
+                        data-attr=<?= $block->getJsonAttrVal($product) ?>
+                ><?= __('Check this prod') ?></button>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+
+<style>
+    .selected {
+        background: rgba(0, 32, 127, 0.2);
+    }
+</style>
